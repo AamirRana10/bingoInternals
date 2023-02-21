@@ -10,13 +10,15 @@ ChatMessage chatMessageFromJson(String str) =>
 String chatMessageToJson(ChatMessage data) => json.encode(data.toJson());
 
 class ChatMessage {
-  String chatId;
+  String? id;
+  String? chatId;
   final String text;
   final ChatMessageType messageType;
   final MessageStatus messageStatus;
   final bool isSender;
 
   ChatMessage({
+    this.id,
     required this.chatId,
     required this.text,
     required this.messageType,
@@ -25,6 +27,7 @@ class ChatMessage {
   });
 
   Map<String, dynamic> toJson() => {
+        'id': id,
         'chatId': chatId,
         'text': text,
         'messageType': messageType,
@@ -32,6 +35,7 @@ class ChatMessage {
         'isSender': isSender
       };
   factory ChatMessage.fromJson(Map<String, dynamic> json) => ChatMessage(
+        id: json["id"],
         chatId: json["chatId"],
         text: json["text"],
         messageType: json["messageType"],
@@ -40,11 +44,8 @@ class ChatMessage {
       );
 }
 
-
 // class ChatMessage {
-  
 
-  
 // }
 
 // List demeChatMessages = [

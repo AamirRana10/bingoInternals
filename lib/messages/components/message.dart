@@ -15,7 +15,6 @@ class Message extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Your message to string is : ' + message.toString());
     Widget messageContaint(ChatMessage message) {
       switch (message.messageType) {
         case ChatMessageType.text:

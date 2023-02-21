@@ -119,6 +119,31 @@ class AppState with ChangeNotifier {
         FirebaseFirestore.instance.collection("users");
   }
 
+  Map<String, dynamic> chatData = {};
+  Future getMessages(chatId) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('chatMessage/' + chatId + '/texts/')
+        // .where('chatId', isEqualTo: chatId)
+        .get();
+    // querySnapshot.then((value) {
+    // myList = value.docs.toList();
+    // print('yehi hai -> ' + myList.toString());
+
+    for (var doc in querySnapshot.docs) {
+      // Getting data directly
+      // String name = doc.get('text');
+      // print(doc.get('messageStatus'));
+
+      // Getting data from map
+      chatData = doc.data();
+      print(chatData.toString());
+      // int age = data['age'];
+    }
+    notifyListeners();
+    return chatData;
+    // });
+  }
+
   void addMessage(ChatMessage chatMessage, BuildContext context) {
     final chatMessages =
         FirebaseFirestore.instance.collection("chatMessages").doc();
@@ -130,6 +155,17 @@ class AppState with ChangeNotifier {
 
     chatMessages.set(data).whenComplete(() => print('cool'));
   }
+
+  // void addMessage(Texts texts, BuildContext context) {
+  //   final txtMsgs = FirebaseFirestore.instance.collection("texts").doc();
+  //   // print(chatMessage.chatId);
+  //   texts.id = texts.id;
+  //   final data = texts.toJson();
+  //
+  //   //create document and write data to firebase
+  //
+  //   txtMsgs.set(data).whenComplete(() => print('cool'));
+  // }
 
   Future<void> setChatId(id) async {
     if (chatId == '0') {

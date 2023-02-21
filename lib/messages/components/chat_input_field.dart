@@ -1,15 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../../constants.dart';
 import '../../AppState/appState.dart';
+import '../../models/ChatMessage.dart';
+import '../../models/TextMsg.dart';
 
-class ChatInputField extends StatelessWidget {
+class ChatInputField extends StatefulWidget {
   const ChatInputField({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<ChatInputField> createState() => _ChatInputFieldState();
+}
+
+class _ChatInputFieldState extends State<ChatInputField> {
   @override
   Widget build(BuildContext context) {
     var appState = context.read<AppState>();
@@ -62,6 +68,10 @@ class ChatInputField extends StatelessWidget {
                         textInputAction: TextInputAction.go,
                         onSubmitted: (value) {
                           // appState.addMessage(ChatMessage chatMessage);
+                          Textmsg texts = Textmsg(
+                            text: value,
+                          );
+                          addTxt(texts, context);
                           print(value);
                           textController.clear();
                         },
@@ -96,5 +106,17 @@ class ChatInputField extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  addTxt(Textmsg texts, BuildContext context) {
+    final docTxt =
+        FirebaseFirestore.instance.collection("chatMessage/1-2/texts/").doc();
+    texts.id = docTxt.id;
+    // print(texts.id);
+    final data = texts.toJson();
+
+    //create document and write data to firebase
+
+    docTxt.set(data);
   }
 }
